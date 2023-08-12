@@ -6,18 +6,19 @@ import { FcGoogle } from "react-icons/fc";
 import { useState, useCallback } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import useRegiterModal from "@/app/hooks/useRegisterModal";
 import { toast } from "react-hot-toast";
 import Modal from "./Modal";
 import Heading from "../Heading";
 import Input from "../inputs/input";
 import Button from "../Button";
-import useLoginModal from "@/app/hooks/useLoginModal";
 import { useRouter } from 'next/navigation'
+import useRegisterModal from '@/app/hooks/useRegisterModal';
+import useLoginModal from '@/app/hooks/useLoginModal';
+
 const LoginModal = () => {
   const loginModal = useLoginModal();
   const router = useRouter()
-  const registerModal = useRegiterModal();
+  const registerModal = useRegisterModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -52,6 +53,11 @@ const LoginModal = () => {
       }
     })
   };
+
+  const toggle = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -105,16 +111,16 @@ const LoginModal = () => {
                 gap-3
             "
         >
-          <div>Don`t have an account?</div>
+          <div>First time using Airbnb?</div>
           <div
-            onClick={() => loginModal.onClose()}
+            onClick={toggle}
             className="
                         text-neutera-800
                         cursor-pointer
                         hover:underline
                     "
           >
-            Register
+            Create an account
           </div>
         </div>
       </div>

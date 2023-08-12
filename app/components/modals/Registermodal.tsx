@@ -5,14 +5,17 @@ import { FcGoogle } from "react-icons/fc";
 import { useState, useCallback } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import useRegiterModal from "@/app/hooks/useRegisterModal";
 import { toast } from "react-hot-toast";
 import Modal from "./Modal";
 import Heading from "../Heading";
 import Input from "../inputs/input";
 import Button from "../Button";
-const Registermodal = () => {
-  const registermodal = useRegiterModal();
+import useRegisterModal from "@/app/hooks/useRegisterModal";
+import { signIn } from "next-auth/react";
+import useLoginModal from "@/app/hooks/useLoginModal";
+const RegisterModal = () => {
+  const registermodal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -42,6 +45,11 @@ const Registermodal = () => {
         setIsLoading(false);
       });
   };
+
+  const toggle = useCallback(() => {
+    registermodal.onClose();
+    loginModal.onOpen();
+  }, [registermodal, loginModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -78,13 +86,13 @@ const Registermodal = () => {
         outline
         label="Continue with Google"
         Icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() => signIn('google')}
       />
       <Button
         outline
         label="Continue with Github"
         Icon={AiFillGithub}
-        onClick={() => {}}
+        onClick={() => signIn('github')}
       />
       <div
         className="text-neutral-500
@@ -104,7 +112,7 @@ const Registermodal = () => {
         >
           <div>Already have an account?</div>
           <div
-            onClick={registermodal.onClose}
+            onClick={toggle}
             className="
                         text-neutera-800
                         cursor-pointer
@@ -131,4 +139,4 @@ const Registermodal = () => {
   );
 };
 
-export default Registermodal;
+export default RegisterModal;
